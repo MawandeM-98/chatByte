@@ -7,8 +7,6 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-const PORT = 3000;
-
 // Serve static files from /public
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -18,15 +16,12 @@ const rooms = {};
 io.on('connection', (socket) => {
   console.log(`✅ User connected: ${socket.id}`);
 
-  // Join a room
   socket.on('joinRoom', ({ username, room }) => {
     socket.join(room);
 
-    // Save user
     if (!rooms[room]) rooms[room] = {};
     rooms[room][socket.id] = username;
 
-    // Tell everyone in the room
     io.to(room).emit('message', {
       user: 'System',
       text: `${username} joined the room`,
@@ -34,15 +29,12 @@ io.on('connection', (socket) => {
       system: true,
     });
 
-    // Send updated user list
     io.to(room).emit('userList', Object.values(rooms[room]));
 
-    // Store on socket for later
     socket.username = username;
     socket.room = room;
   });
 
-  // Chat message
   socket.on('chatMessage', ({ text }) => {
     if (!socket.room) return;
     io.to(socket.room).emit('message', {
@@ -52,7 +44,6 @@ io.on('connection', (socket) => {
     });
   });
 
-  // Typing indicator
   socket.on('typing', (isTyping) => {
     if (!socket.room) return;
     socket.to(socket.room).emit('userTyping', {
@@ -61,7 +52,6 @@ io.on('connection', (socket) => {
     });
   });
 
-  // Disconnect
   socket.on('disconnect', () => {
     const { room, username } = socket;
     if (room && rooms[room]) {
@@ -82,6 +72,8 @@ io.on('connection', (socket) => {
   });
 });
 
-server.listen(PORT, () => {
-  console.log(`🚀 Server running at http://localhost:${PORT}`);
+const PORT = process.env.PORT || 3000;
+
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 chatByte running on port ${PORT}`);
 });
