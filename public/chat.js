@@ -22,7 +22,18 @@ let typingTimeout;
 joinBtn.addEventListener('click', () => {
   const username = usernameInput.value.trim();
   const room = roomInput.value.trim() || 'general';
-  if (!username) return alert('Enter a username');
+
+  if (!username) {
+    usernameInput.classList.add('error');
+    usernameInput.placeholder = 'Please enter a name first';
+    usernameInput.focus();
+    return;
+  }
+  if (username.length > 20) {
+    usernameInput.classList.add('error');
+    usernameInput.placeholder = 'Max 20 characters';
+    return;
+  }
 
   myUsername = username;
   socket.emit('joinRoom', { username, room });
@@ -33,8 +44,8 @@ joinBtn.addEventListener('click', () => {
   input.focus();
 });
 
-usernameInput.addEventListener('keypress', (e) => {
-  if (e.key === 'Enter') joinBtn.click();
+usernameInput.addEventListener('input', () => {
+  usernameInput.classList.remove('error');
 });
 
 // Leave
