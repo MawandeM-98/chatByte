@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <title>Real-Time Chat</title>
   <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💬</text></svg>">
+  
 </head>
 <body>
   <!-- Login screen -->
@@ -20,12 +20,15 @@
   <!-- Chat screen -->
   <div id="chat" class="screen hidden">
     <header>
-      <div>
-        <strong id="roomName">general</strong>
-        <span id="userCount" class="badge">0 online</span>
-      </div>
-      <button id="leaveBtn">Leave</button>
-    </header>
+  <div>
+    <strong id="roomName">general</strong>
+    <span id="userCount" class="badge">0 online</span>
+  </div>
+  <div class="header-actions">
+    <button id="copyBtn" title="Copy invite link">🔗 Copy invite</button>
+    <button id="leaveBtn">Leave</button>
+  </div>
+</header>
 
     <aside>
       <h3>Users</h3>

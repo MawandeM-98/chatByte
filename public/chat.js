@@ -18,6 +18,11 @@ const typingEl = document.getElementById('typing');
 let myUsername = '';
 let typingTimeout;
 
+// Auto-fill room from URL (?room=general)
+const urlParams = new URLSearchParams(window.location.search);
+const roomFromUrl = urlParams.get('room');
+if (roomFromUrl) roomInput.value = roomFromUrl;
+
 // Join
 joinBtn.addEventListener('click', () => {
   const username = usernameInput.value.trim();
@@ -46,6 +51,25 @@ joinBtn.addEventListener('click', () => {
 
 usernameInput.addEventListener('input', () => {
   usernameInput.classList.remove('error');
+});
+
+const copyBtn = document.getElementById('copyBtn');
+
+copyBtn.addEventListener('click', async () => {
+  const room = roomNameEl.textContent;
+  const link = `${window.location.origin}/?room=${encodeURIComponent(room)}`;
+
+  try {
+    await navigator.clipboard.writeText(link);
+    copyBtn.textContent = '✅ Copied!';
+    copyBtn.classList.add('copied');
+    setTimeout(() => {
+      copyBtn.textContent = '🔗 Copy invite';
+      copyBtn.classList.remove('copied');
+    }, 2000);
+  } catch {
+    prompt('Copy this link:', link);
+  }
 });
 
 // Leave

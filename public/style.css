@@ -141,3 +141,18 @@ main {
   border-top: 1px solid #334155;
 }
 #messageForm input { flex: 1; }
+
+.header-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+#copyBtn {
+  background: #334155;
+}
+#copyBtn:hover {
+  background: #475569;
+}
+#copyBtn.copied {
+  background: #22c55e;
+}
