@@ -94,6 +94,31 @@ input.addEventListener('input', () => {
   typingTimeout = setTimeout(() => socket.emit('typing', false), 1000);
 });
 
+
+// Receive message history on join
+socket.on('history', (messages) => {
+  messagesEl.innerHTML = ''; // Clear existing messages
+  
+  messages.forEach(msg => {
+    const div = document.createElement('div');
+    
+    if (msg.system) {
+      div.className = 'msg system';
+      div.textContent = msg.text;
+    } else {
+      div.className = 'msg' + (msg.user === myUsername ? ' own' : '');
+      div.innerHTML = `
+        <div class="meta"><strong>${escapeHtml(msg.user)}</strong><span>${msg.time}</span></div>
+        <div>${escapeHtml(msg.text)}</div>
+      `;
+    }
+    messagesEl.appendChild(div);
+  });
+  
+  // Scroll to bottom after loading history
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+});
+
 // Receive message
 socket.on('message', (msg) => {
   const div = document.createElement('div');
